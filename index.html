@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encontro Gamer - 22 de Junho</title>
+    <!-- Adicione os SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a2e;
+            font-family: 'Press Start 2P', cursive;
+            color: #fff;
+            overflow-x: hidden;
+            background-image: 
+                linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .pixel-border {
+            border: 8px solid #ff5555;
+            position: relative;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 0 8px #000, 0 0 0 16px #ff5555, 0 0 20px rgba(255, 85, 85, 0.5);
+            margin: 40px 0;
+        }
+        
+        h1 {
+            color: #ffcc00;
+            text-align: center;
+            font-size: 2.5rem;
+            text-shadow: 4px 4px 0 #ff5555, 8px 8px 0 #000;
+            margin-bottom: 30px;
+            animation: pulse 1.5s infinite alternate;
+        }
+        
+        .mario-img {
+            display: block;
+            margin: 0 auto;
+            width: 150px;
+            image-rendering: pixelated;
+            transition: transform 0.3s;
+        }
+        
+        .mario-img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .info-box {
+            background-color: #333;
+            padding: 15px;
+            margin: 20px 0;
+            border: 4px solid #555;
+            position: relative;
+        }
+        
+        .info-box:before {
+            content: "";
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border: 4px solid #ff5555;
+            pointer-events: none;
+        }
+        
+        h2 {
+            color: #55ff55;
+            font-size: 1.5rem;
+            margin-top: 0;
+        }
+        
+        p {
+            line-height: 1.6;
+            font-size: 0.9rem;
+        }
+        
+        .highlight {
+            color: #ff5555;
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #ff5555;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            margin: 20px auto;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 0 #000;
+        }
+        
+        .btn:hover {
+            background-color: #ff3333;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #000;
+        }
+        
+        .btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: none;
+        }
+        
+        .pixel-corners {
+            clip-path: 
+                polygon(
+                    0% 8px, 8px 8px, 8px 0%, calc(100% - 8px) 0%, 
+                    calc(100% - 8px) 8px, 100% 8px, 100% calc(100% - 8px), 
+                    calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%, 
+                    8px 100%, 8px calc(100% - 8px), 0% calc(100% - 8px)
+                );
+        }
+        
+        .game-icons {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        
+        .game-icon {
+            width: 60px;
+            height: 60px;
+            image-rendering: pixelated;
+            margin: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .game-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .countdown {
+            font-size: 1.8rem;
+            text-align: center;
+            color: #55ffff;
+            margin: 30px 0;
+            text-shadow: 0 0 10px rgba(85, 255, 255, 0.7);
+        }
+        
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+                text-shadow: 4px 4px 0 #ff5555, 8px 8px 0 #000;
+            }
+            to {
+                transform: scale(1.05);
+                text-shadow: 6px 6px 0 #ff5555, 12px 12px 0 #000;
+            }
+        }
+        
+        .pixel-coin {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-image: url('https://www.pngmart.com/files/3/Gold-Coin-PNG-Transparent-Image.png');
+            background-size: contain;
+            animation: float 3s infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.7rem;
+            color: #777;
+        }
+        
+        /* Estilos para a lista de participantes */
+        .participants-container {
+            background-color: #222;
+            padding: 15px;
+            margin-top: 30px;
+            border: 4px solid #444;
+        }
+        
+        .participants-title {
+            color: #ffcc00;
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0 #000;
+        }
+        
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .participant {
+            background-color: #333;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            position: relative;
+            animation: popIn 0.3s ease-out;
+        }
+        
+        .participant::before {
+            content: "🎮";
+            margin-right: 5px;
+        }
+        
+        .challenge-message {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            color: #55ffff;
+            animation: blink 1.5s infinite;
+        }
+        
+        @keyframes popIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .participant {
+                font-size: 0.8rem;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="pixel-border pixel-corners">
+
+            
+            <h1>ENCONTRO GAMER</h1>
+            
+            <div class="countdown" id="countdown"></div>
+            
+            <div class="info-box">
+                <h2>QUANDO?</h2>
+                <p><span class="highlight">22 DE JUNHO</span> - A PARTIR DAS <span class="highlight">11:30H</span></p>
+            </div>
+            
+            <div class="info-box">
+                <h2>ONDE?</h2>
+                <p>Estrada do Campinho 7005 bl17 ap103 Condominio Cotovias</p>
+            </div>
+            
+            <div class="info-box">
+                <h2>O QUE TERÁ?</h2>
+                <p>
+                    • TORNEIOS DE <span class="highlight">Call of Duty</span><br>
+                    • COMPETIÇÃO DE <span class="highlight">MK1</span><br>
+                    • JOGOS RETRO <span class="highlight"></span><br>
+                    • <span class="highlight">RANGO</span> E <span class="highlight">REFRIGERANTE</span><br>
+                    • MUITA <span class="highlight">DIVERSÃO</span>!
+                </p>
+            </div>
+            
+            
+            <div style="text-align: center;">
+                <button class="btn pixel-corners" id="confirmBtn">EU VOU!</button>
+            </div>
+            
+            <!-- Desafio para outros gamers -->
+            <div class="challenge-message" id="challengeMessage">
+                SERÁ QUE VOCÊ CONSEGUE VENCER <span id="lastParticipant"></span>?
+            </div>
+            
+            <!-- Lista de participantes -->
+            <div class="participants-container">
+                <div class="participants-title">GAMERS CONFIRMADOS:</div>
+                <div class="participants-list" id="participantsList">
+                    <!-- Participantes serão adicionados aqui pelo Firebase -->
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            TRAZ SEU CONTROLE E SEU MELHOR GAME FACE! #VEMPROGAME
+        </footer>
+    </div>
+
+    <script>
+        // Configuração do Firebase
+        const firebaseConfig = {
+  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+  authDomain: "rifas-c414b.firebaseapp.com",
+  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+  projectId: "rifas-c414b",
+  storageBucket: "rifas-c414b.firebasestorage.app",
+  messagingSenderId: "770195193538",
+  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+};
+        
+        // Inicializa o Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        
+        // Referência para os participantes no Firebase
+        const participantsRef = database.ref('participants');
+        
+        // Contador regressivo
+        function updateCountdown() {
+            const eventDate = new Date('June 22, 2024 14:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+            
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById('countdown').innerHTML = `
+                FALTAM: ${days} DIAS ${Math.floor(hours)}H ${minutes}M ${seconds}S
+            `;
+            
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = "O EVENTO COMEÇOU!";
+            }
+        }
+        
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+        
+        // Efeito de moedas
+        document.getElementById('confirmBtn').addEventListener('mouseover', function() {
+            for (let i = 0; i < 10; i++) {
+                createCoin(this);
+            }
+        });
+        
+        function createCoin(button) {
+            const coin = document.createElement('div');
+            coin.classList.add('pixel-coin');
+            
+            const buttonRect = button.getBoundingClientRect();
+            const x = buttonRect.left + Math.random() * buttonRect.width;
+            const y = buttonRect.top + buttonRect.height;
+            
+            coin.style.left = `${x}px`;
+            coin.style.top = `${y}px`;
+            coin.style.animationDelay = `${Math.random() * 0.5}s`;
+            
+            document.body.appendChild(coin);
+            
+            setTimeout(() => {
+                coin.remove();
+            }, 3000);
+        }
+        
+        // Carrega os participantes do Firebase
+        participantsRef.on('value', (snapshot) => {
+            const participants = snapshot.val() || {};
+            const participantsList = document.getElementById('participantsList');
+            participantsList.innerHTML = '';
+            
+            const participantNames = Object.values(participants);
+            
+            // Ordena por ordem de chegada (opcional)
+            // participantNames.reverse();
+            
+            // Mostra os últimos 10 participantes (ou todos se forem menos que 10)
+            const displayParticipants = participantNames.slice(-10);
+            
+            displayParticipants.forEach(name => {
+                const participantElement = document.createElement('div');
+                participantElement.classList.add('participant');
+                participantElement.textContent = name.toUpperCase();
+                participantsList.appendChild(participantElement);
+            });
+            
+            // Atualiza a mensagem de desafio com o último participante
+            if (participantNames.length > 0) {
+                const lastParticipant = participantNames[participantNames.length - 1];
+                document.getElementById('lastParticipant').textContent = lastParticipant.toUpperCase();
+                document.getElementById('challengeMessage').style.display = 'block';
+            } else {
+                document.getElementById('challengeMessage').style.display = 'none';
+            }
+        });
+        
+        // Confirmação de presença
+        document.getElementById('confirmBtn').addEventListener('click', function() {
+            const name = prompt("E aí gamer! Qual seu nome ou apelido?");
+            if (name && name.trim() !== '') {
+                // Salva no Firebase
+                const newParticipantRef = participantsRef.push();
+                newParticipantRef.set(name.trim());
+                
+                // Feedback visual
+                alert(`TOP ${name.toUpperCase()}! VOCÊ ESTÁ CONFIRMADO(A) PARA O ENCONTRO GAMER! 🎮✨\n\nPrepare-se para a competição!`);
+                this.textContent = "CONFIRMADO! 🎮";
+                this.style.backgroundColor = "#55ff55";
+                
+                // Efeito especial
+                for (let i = 0; i < 20; i++) {
+                    createCoin(this);
+                }
+            }
+        });
+        
+        // Efeito de digitação para os títulos
+        const titles = document.querySelectorAll('h1, h2');
+        titles.forEach(title => {
+            const text = title.textContent;
+            title.textContent = '';
+            
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    title.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 50);
+        });
+    </script>
+</body>
+</html>
