@@ -16,6 +16,8 @@
             --accent: #00ff88;
             --dark: #0a0a14;
             --light: #f0f0f0;
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
         }
         
         body {
@@ -26,17 +28,26 @@
             color: var(--light);
             overflow-x: hidden;
             background-image: 
-                linear-gradient(rgba(10, 10, 20, 0.9), rgba(10, 10, 20, 0.9)),
+                radial-gradient(circle at 20% 30%, rgba(255, 45, 45, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(0, 255, 136, 0.15) 0%, transparent 25%),
+                linear-gradient(rgba(10, 10, 20, 0.95), rgba(10, 10, 20, 0.95)),
                 url('https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-attachment: fixed;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
             position: relative;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .neon-border {
@@ -49,6 +60,13 @@
             margin: 40px 0;
             border-radius: 10px;
             overflow: hidden;
+            transition: all 0.5s;
+        }
+        
+        .neon-border:hover {
+            box-shadow: 0 0 25px var(--primary), 
+                        inset 0 0 25px var(--primary);
+            transform: translateY(-5px);
         }
         
         .neon-border::before {
@@ -68,15 +86,24 @@
         h1 {
             color: var(--secondary);
             text-align: center;
-            font-size: 3.5rem;
+            font-size: 4rem;
             text-shadow: 0 0 10px var(--secondary), 
                          0 0 20px var(--secondary),
                          0 0 30px var(--secondary);
             margin-bottom: 30px;
-            animation: pulse 1.5s infinite alternate;
-            letter-spacing: 2px;
+            animation: pulse 1.5s infinite alternate, rainbow 8s infinite linear;
+            letter-spacing: 3px;
             position: relative;
             z-index: 1;
+            background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+            padding: 20px;
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+        
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
         }
         
         h1::after {
@@ -84,8 +111,8 @@
             position: absolute;
             right: 10%;
             top: -20px;
-            font-size: 2rem;
-            animation: swing 2s infinite ease-in-out;
+            font-size: 3rem;
+            animation: swing 2s infinite ease-in-out, float 3s infinite ease-in-out;
         }
         
         h1::before {
@@ -93,8 +120,13 @@
             position: absolute;
             left: 10%;
             bottom: -20px;
-            font-size: 2rem;
-            animation: swing 2.5s infinite ease-in-out;
+            font-size: 3rem;
+            animation: swing 2.5s infinite ease-in-out, float 4s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
         
         .countdown-container {
@@ -102,43 +134,77 @@
             border-radius: 10px;
             padding: 20px;
             margin: 30px auto;
-            max-width: 600px;
+            max-width: 700px;
             border: 2px solid var(--accent);
             box-shadow: 0 0 10px var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/dark-stripes.png');
+            opacity: 0.1;
+            pointer-events: none;
         }
         
         .countdown {
-            font-size: 2.5rem;
+            font-size: 3rem;
             text-align: center;
             color: var(--accent);
             margin: 10px 0;
             text-shadow: 0 0 10px var(--accent);
             font-family: 'Press Start 2P', cursive;
+            letter-spacing: 3px;
+            animation: blink 1s infinite alternate;
+        }
+        
+        @keyframes blink {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
         
         .countdown-label {
             text-align: center;
             color: var(--light);
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            position: relative;
+        }
+        
+        .countdown-label::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            margin: 10px auto;
+            border-radius: 3px;
         }
         
         .info-box {
             background-color: rgba(20, 20, 30, 0.8);
-            padding: 20px;
-            margin: 25px 0;
+            padding: 25px;
+            margin: 30px 0;
             border-radius: 8px;
             border-left: 5px solid var(--primary);
             position: relative;
-            transition: transform 0.3s;
+            transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
         }
         
         .info-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border-left: 5px solid var(--accent);
         }
         
         .info-box::before {
@@ -153,15 +219,27 @@
         
         h2 {
             color: var(--secondary);
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
         }
         
         p {
             line-height: 1.7;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 0;
         }
         
@@ -169,16 +247,35 @@
             color: var(--accent);
             font-weight: bold;
             text-shadow: 0 0 5px var(--accent);
+            position: relative;
+        }
+        
+        .highlight::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s;
+        }
+        
+        .highlight:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
         
         .btn {
             display: block;
             background: linear-gradient(45deg, var(--primary), #ff6b6b);
             color: white;
-            padding: 18px 40px;
+            padding: 20px 50px;
             text-decoration: none;
-            font-size: 1.5rem;
-            margin: 30px auto;
+            font-size: 1.8rem;
+            margin: 40px auto;
             border: none;
             cursor: pointer;
             position: relative;
@@ -188,10 +285,10 @@
             border-radius: 50px;
             font-family: 'Bungee', cursive;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(255, 45, 45, 0.4);
+            letter-spacing: 2px;
+            box-shadow: 0 5px 20px rgba(255, 45, 45, 0.5);
             width: 80%;
-            max-width: 400px;
+            max-width: 500px;
             z-index: 1;
         }
         
@@ -199,52 +296,90 @@
             content: "";
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #ff6b6b, var(--primary));
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.3s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 45, 45, 0.6);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 45, 45, 0.8);
         }
         
         .btn:hover::before {
-            opacity: 1;
+            left: 100%;
         }
         
         .btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 3px 10px rgba(255, 45, 45, 0.6);
+            transform: translateY(2px);
+            box-shadow: 0 3px 15px rgba(255, 45, 45, 0.6);
         }
         
         .btn-glow {
-            animation: btnPulse 2s infinite;
+            animation: btnPulse 2s infinite, rainbowBorder 5s infinite linear;
+        }
+        
+        @keyframes btnPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px 0 rgba(255, 45, 45, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 30px 10px rgba(255, 45, 45, 0.9);
+            }
+        }
+        
+        @keyframes rainbowBorder {
+            0% { border: 2px solid var(--primary); }
+            33% { border: 2px solid var(--accent); }
+            66% { border: 2px solid var(--secondary); }
+            100% { border: 2px solid var(--primary); }
         }
         
         .game-icons {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            margin: 40px 0;
-            gap: 20px;
+            margin: 50px 0;
+            gap: 30px;
         }
         
         .game-icon {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
-            transition: all 0.3s;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+            transition: all 0.4s;
+            position: relative;
         }
         
         .game-icon:hover {
-            transform: scale(1.2) rotate(10deg);
-            filter: drop-shadow(0 0 15px var(--accent));
+            transform: scale(1.3) rotate(15deg);
+            filter: drop-shadow(0 0 20px var(--accent));
+        }
+        
+        .game-icon::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.4s;
+        }
+        
+        .game-icon:hover::after {
+            border-color: var(--accent);
+            animation: pulseIcon 1.5s infinite;
+        }
+        
+        @keyframes pulseIcon {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; }
         }
         
         @keyframes pulse {
@@ -255,10 +390,10 @@
                              0 0 30px var(--secondary);
             }
             to {
-                transform: scale(1.03);
-                text-shadow: 0 0 15px var(--secondary), 
-                             0 0 30px var(--secondary),
-                             0 0 45px var(--secondary);
+                transform: scale(1.05);
+                text-shadow: 0 0 20px var(--secondary), 
+                             0 0 40px var(--secondary),
+                             0 0 60px var(--secondary);
             }
         }
         
@@ -268,119 +403,208 @@
                             inset 0 0 10px var(--accent);
             }
             100% {
-                box-shadow: 0 0 20px var(--accent), 
-                            inset 0 0 20px var(--accent);
-            }
-        }
-        
-        @keyframes btnPulse {
-            0%, 100% {
-                box-shadow: 0 0 10px 0 rgba(255, 45, 45, 0.7);
-            }
-            50% {
-                box-shadow: 0 0 20px 5px rgba(255, 45, 45, 0.9);
+                box-shadow: 0 0 30px var(--accent), 
+                            inset 0 0 30px var(--accent);
             }
         }
         
         @keyframes swing {
             0%, 100% {
-                transform: rotate(-10deg);
+                transform: rotate(-15deg);
             }
             50% {
-                transform: rotate(10deg);
+                transform: rotate(15deg);
             }
         }
         
         /* Estilos para a lista de participantes */
         .participants-container {
             background-color: rgba(20, 20, 30, 0.9);
-            padding: 25px;
-            margin-top: 40px;
-            border-radius: 10px;
-            border: 2px solid var(--secondary);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            padding: 30px;
+            margin-top: 50px;
+            border-radius: 15px;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
             position: relative;
+            overflow: hidden;
         }
         
         .participants-container::before {
             content: "🏆";
             position: absolute;
-            top: -20px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 2rem;
+            font-size: 3rem;
             background: var(--dark);
-            padding: 0 20px;
+            padding: 0 30px;
+            z-index: 2;
+            text-shadow: 0 0 10px var(--secondary);
+        }
+        
+        .participants-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
         
         .participants-title {
             color: var(--secondary);
             text-align: center;
-            font-size: 2rem;
-            margin-bottom: 25px;
-            text-shadow: 0 0 10px var(--secondary);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px var(--secondary);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .participants-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
         }
         
         .participants-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
         }
         
         .participant-card {
             background: linear-gradient(135deg, rgba(40, 40, 60, 0.8), rgba(20, 20, 40, 0.9));
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.3rem;
             position: relative;
-            animation: popIn 0.4s ease-out;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            border-left: 4px solid var(--accent);
-            transition: all 0.3s;
+            animation: popIn 0.5s ease-out;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid var(--accent);
+            transition: all 0.4s;
             display: flex;
             align-items: center;
+            overflow: hidden;
+            backdrop-filter: blur(3px);
+        }
+        
+        .participant-card:nth-child(1) {
+            border-left: 5px solid gold;
+            background: linear-gradient(135deg, rgba(80, 60, 20, 0.8), rgba(60, 40, 10, 0.9));
+        }
+        
+        .participant-card:nth-child(2) {
+            border-left: 5px solid silver;
+            background: linear-gradient(135deg, rgba(100, 100, 100, 0.8), rgba(70, 70, 70, 0.9));
+        }
+        
+        .participant-card:nth-child(3) {
+            border-left: 5px solid #cd7f32; /* bronze */
+            background: linear-gradient(135deg, rgba(80, 50, 20, 0.8), rgba(60, 30, 10, 0.9));
         }
         
         .participant-rank {
             background-color: var(--primary);
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 15px;
+            margin-right: 20px;
             font-weight: bold;
-            font-size: 0.9rem;
+            font-size: 1.2rem;
             flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(255, 45, 45, 0.7);
+        }
+        
+        .participant-card:nth-child(1) .participant-rank {
+            background: gold;
+            color: #333;
+            box-shadow: 0 0 15px gold;
+        }
+        
+        .participant-card:nth-child(2) .participant-rank {
+            background: silver;
+            color: #333;
+            box-shadow: 0 0 15px silver;
+        }
+        
+        .participant-card:nth-child(3) .participant-rank {
+            background: #cd7f32;
+            color: white;
+            box-shadow: 0 0 15px #cd7f32;
         }
         
         .participant-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 2;
         }
         
         .participant-name {
             flex-grow: 1;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .participant-title {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .participant-card::after {
             content: "🎮";
-            margin-left: 10px;
+            margin-left: 15px;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .participant-card:hover::after {
+            transform: rotate(20deg) scale(1.3);
+        }
+        
+        .participant-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+        
+        .participant-card:hover::before {
+            transform: translateX(100%);
         }
         
         .challenge-container {
-            background: linear-gradient(135deg, rgba(255, 45, 45, 0.1), rgba(0, 255, 136, 0.1));
-            padding: 25px;
-            margin: 30px 0;
-            border-radius: 10px;
-            border: 2px solid var(--primary);
+            background: linear-gradient(135deg, rgba(255, 45, 45, 0.15), rgba(0, 255, 136, 0.15));
+            padding: 30px;
+            margin: 40px 0;
+            border-radius: 15px;
+            border: 3px solid var(--primary);
             text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         
         .challenge-container::before {
@@ -397,54 +621,91 @@
         
         .challenge-title {
             color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 45, 45, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .challenge-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
         }
         
         .challenge-message {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--light);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         
         .challenge-highlight {
             color: var(--accent);
             font-weight: bold;
-            text-shadow: 0 0 5px var(--accent);
-            font-size: 1.8rem;
+            text-shadow: 0 0 10px var(--accent);
+            font-size: 2rem;
             display: inline-block;
-            animation: shake 0.5s infinite alternate;
+            animation: shake 0.5s infinite alternate, glow 1.5s infinite alternate;
+            position: relative;
+            padding: 0 10px;
+        }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px var(--accent); }
+            100% { text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent); }
         }
         
         .versus {
             display: inline-block;
             background-color: var(--primary);
             color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 30px;
             font-weight: bold;
             margin: 0 10px;
             transform: rotate(-5deg);
+            font-size: 1.5rem;
+            box-shadow: 0 0 10px rgba(255, 45, 45, 0.7);
+            animation: pulseVersus 1.5s infinite;
+        }
+        
+        @keyframes pulseVersus {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(-5deg) scale(1.1); }
         }
         
         .trophy {
             position: absolute;
-            font-size: 3rem;
+            font-size: 4rem;
             opacity: 0.2;
             z-index: 0;
+            animation: float 4s infinite ease-in-out;
         }
         
         .trophy-1 {
-            top: 10px;
-            left: 10px;
+            top: 20px;
+            left: 20px;
+            animation-delay: 0s;
         }
         
         .trophy-2 {
-            bottom: 10px;
-            right: 10px;
+            bottom: 20px;
+            right: 20px;
+            animation-delay: 0.5s;
         }
         
         @keyframes popIn {
@@ -453,7 +714,7 @@
                 opacity: 0;
             }
             80% {
-                transform: scale(1.05);
+                transform: scale(1.1);
             }
             100% {
                 transform: scale(1);
@@ -472,57 +733,42 @@
         
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 15px;
+            height: 15px;
             background-color: var(--accent);
             opacity: 0;
             z-index: 10;
+            border-radius: 50%;
         }
         
         footer {
             text-align: center;
-            margin-top: 60px;
-            font-size: 1rem;
+            margin-top: 80px;
+            font-size: 1.2rem;
             color: #777;
-            padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
         }
         
         .footer-highlight {
             color: var(--secondary);
             font-weight: bold;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 10px;
         }
         
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .container {
-                padding: 10px;
-            }
-            
-            .countdown {
-                font-size: 1.8rem;
-            }
-            
-            .btn {
-                font-size: 1.2rem;
-                padding: 15px 30px;
-            }
-            
-            .participants-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .challenge-message {
-                font-size: 1.2rem;
-            }
-            
-            .game-icon {
-                width: 60px;
-                height: 60px;
-            }
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
         
         /* Modal de confirmação */
@@ -533,90 +779,298 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
+            backdrop-filter: blur(5px);
         }
         
         .modal-content {
             background: linear-gradient(135deg, #1a1a2e, #16213e);
-            padding: 30px;
-            border-radius: 10px;
-            max-width: 500px;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
             width: 90%;
             text-align: center;
             position: relative;
             border: 3px solid var(--accent);
-            box-shadow: 0 0 30px var(--accent);
-            animation: modalAppear 0.4s ease-out;
+            box-shadow: 0 0 40px var(--accent);
+            animation: modalAppear 0.5s ease-out;
+            overflow: hidden;
+        }
+        
+        .modal-content::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
         }
         
         @keyframes modalAppear {
             from {
-                transform: scale(0.8);
+                transform: scale(0.8) translateY(50px);
                 opacity: 0;
             }
             to {
-                transform: scale(1);
+                transform: scale(1) translateY(0);
                 opacity: 1;
             }
         }
         
         .modal-title {
             color: var(--secondary);
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--secondary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .modal-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
         }
         
         .modal-input {
             width: 100%;
-            padding: 15px;
-            margin: 20px 0;
-            border: 2px solid var(--primary);
-            border-radius: 5px;
+            padding: 20px;
+            margin: 30px 0;
+            border: 3px solid var(--primary);
+            border-radius: 8px;
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             text-align: center;
             font-family: 'Bungee', cursive;
+            transition: all 0.3s;
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent);
         }
         
         .modal-input::placeholder {
             color: rgba(255, 255, 255, 0.5);
+            font-size: 1.2rem;
         }
         
         .modal-btn {
             background: linear-gradient(45deg, var(--primary), #ff6b6b);
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            border-radius: 5px;
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 10px;
+            margin: 20px 15px;
             font-family: 'Bungee', cursive;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 45, 45, 0.5);
+        }
+        
+        .modal-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
         }
         
         .modal-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(255, 45, 45, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 45, 45, 0.8);
+        }
+        
+        .modal-btn:hover::before {
+            left: 100%;
         }
         
         .modal-close {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             background: none;
             border: none;
             color: white;
-            font-size: 1.5rem;
+            font-size: 2rem;
             cursor: pointer;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+        
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        .error-message {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 10px;
+            display: none;
+            text-shadow: 0 0 5px rgba(255, 45, 45, 0.5);
+        }
+        
+        /* Efeitos especiais */
+        .floating-icons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-icon {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.1;
+            animation: floatAround 20s linear infinite;
+        }
+        
+        @keyframes floatAround {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50vw, 25vh) rotate(90deg);
+            }
+            50% {
+                transform: translate(30vw, 60vh) rotate(180deg);
+            }
+            75% {
+                transform: translate(-20vw, 40vh) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .countdown {
+                font-size: 2rem;
+            }
+            
+            .countdown-label {
+                font-size: 1.2rem;
+            }
+            
+            .btn {
+                font-size: 1.3rem;
+                padding: 15px 30px;
+                width: 90%;
+            }
+            
+            .participants-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .challenge-message {
+                font-size: 1.3rem;
+                flex-direction: column;
+            }
+            
+            .versus {
+                margin: 10px 0;
+                transform: rotate(0);
+            }
+            
+            .game-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .modal-title {
+                font-size: 2rem;
+            }
+            
+            .modal-input {
+                font-size: 1.2rem;
+                padding: 15px;
+            }
+            
+            .modal-btn {
+                font-size: 1.2rem;
+                padding: 12px 25px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .info-box {
+                padding: 15px;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            p {
+                font-size: 1rem;
+            }
+            
+            .participant-card {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+            
+            .participant-rank {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+                margin-right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Efeitos flutuantes -->
+    <div class="floating-icons">
+        <div class="floating-icon" style="top: 10%; left: 15%; animation-delay: 0s;">🎮</div>
+        <div class="floating-icon" style="top: 30%; left: 80%; animation-delay: -5s;">👾</div>
+        <div class="floating-icon" style="top: 70%; left: 10%; animation-delay: -10s;">🕹️</div>
+        <div class="floating-icon" style="top: 20%; left: 50%; animation-delay: -15s;">🎯</div>
+        <div class="floating-icon" style="top: 80%; left: 70%; animation-delay: -20s;">🔥</div>
+    </div>
+
     <div class="container">
         <div class="neon-border">
             <h1>BATALHA GAMER 2025</h1>
@@ -629,29 +1083,32 @@
             <div class="info-box">
                 <h2>QUANDO A BATALHA COMEÇA?</h2>
                 <p><span class="highlight">22 DE JUNHO DE 2025</span> - PORTÕES ABERTOS ÀS <span class="highlight">11:30H</span></p>
+                <p>Prepare-se para o maior evento gamer do ano!</p>
             </div>
             
             <div class="info-box">
                 <h2>LOCAL DO CAMPEONATO</h2>
                 <p>Estrada do Campinho 7005 bl17 ap103 - Condomínio Cotovias</p>
-                <p><span class="highlight">Prepare-se para a guerra gamer!</span></p>
+                <p><span class="highlight">A arena está pronta para a batalha épica!</span></p>
             </div>
             
             <div class="info-box">
-                <h2>O QUE TE ESPERÁ?</h2>
+                <h2>O QUE TE ESPERA?</h2>
                 <p>
                     • <span class="highlight">TORNEIO DE CALL OF DUTY</span> - Domine o campo de batalha<br>
                     • <span class="highlight">MORTAL KOMBAT 1</span> - Sangue e honra em cada round<br>
                     • <span class="highlight">COMPETIÇÕES RELÂMPAGO</span> - Jogos retro para testar suas habilidades<br>
                     • <span class="highlight">COMIDA E BEBIDA</span> - Combustível para campeões<br>
+                    • <span class="highlight">PRÊMIOS SURPREENDENTES</span> - Para os melhores guerreiros<br>
                 </p>
             </div>
             
             <div class="game-icons">
-                <img src="https://logos-download.com/wp-content/uploads/2020/06/Call_of_Duty_Logo.png" alt="Call of Duty" class="game-icon">
-                <img src="https://logos-download.com/wp-content/uploads/2021/01/Mortal_Kombat_Logo.png" alt="Mortal Kombat" class="game-icon">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Street_Fighter_Logo.svg/1200px-Street_Fighter_Logo.svg.png" alt="Street Fighter" class="game-icon">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Super_Nintendo_Entertainment_System_logo.svg/1200px-Super_Nintendo_Entertainment_System_logo.svg.png" alt="SNES" class="game-icon">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe-81Ilh8bHSQnihQFPDzaF1b-9SuaYQgyE4f4dooFufD5SponIOFj9e0&s=10" alt="Call of Duty" class="game-icon">
+                <img src="https://upload.wikimedia.org/wikipedia/pt/9/9d/Mortal_Kombat_1_PS5_capa_digital.png" alt="Mortal Kombat" class="game-icon">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdBi6lmNazY2e66LinzzV6KVftehQyWplLQu_22NW3QDpRKXSopwch0hYy&s=10" alt="Street Fighter" class="game-icon">
+
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5FiN1Nzt945uqhO11_bf8Rf2_FrS84cMA-AwjW5gi03zpa1hGdybhilJb&s=10" alt="Fortnite" class="game-icon">
             </div>
             
             <button class="btn btn-glow" id="confirmBtn">EU ACEITO O DESAFIO!</button>
@@ -666,7 +1123,7 @@
                     <span class="versus">VS</span>
                     <span class="challenge-highlight">VOCÊ</span>
                 </div>
-                <p>Você tem coragem de enfrentar o último desafiante? Prove que é o melhor!</p>
+                <p id="challengePhrase">Você tem coragem de enfrentar o último desafiante? Prove que é o melhor!</p>
             </div>
             
             <!-- Lista de participantes -->
@@ -680,7 +1137,7 @@
         
         <footer>
             <span class="footer-highlight">TRAZ SEU CONTROLE, SUA CORAGEM E SEU MELHOR JOGO!</span><br>
-            #QUEMVAIENCARAR?
+            #QUEMVAIENCARAR? #PREPARAPRAEPICBATTLE
         </footer>
     </div>
     
@@ -691,33 +1148,61 @@
             <h3 class="modal-title">ENTRAR NA BATALHA</h3>
             <p>Digite seu nome de guerreiro abaixo para entrar no torneio:</p>
             <input type="text" class="modal-input" id="playerName" placeholder="SEU NOME OU APELIDO" maxlength="20">
+            <p class="error-message" id="errorMessage">Por favor, digite um nome válido!</p>
             <button class="modal-btn" id="confirmModalBtn">CONFIRMAR</button>
-            <p id="errorMessage" style="color: var(--primary); display: none;">Por favor, digite um nome válido!</p>
         </div>
     </div>
 
     <script>
         // Configuração do Firebase
         const firebaseConfig = {
-  apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
-  authDomain: "rifas-c414b.firebaseapp.com",
-  databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
-  projectId: "rifas-c414b",
-  storageBucket: "rifas-c414b.firebasestorage.app",
-  messagingSenderId: "770195193538",
-  appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
-};
+            apiKey: "AIzaSyByyM8RvGNM5pyrQIQ7nCH6mmgYAIpq0bc",
+            authDomain: "rifas-c414b.firebaseapp.com",
+            databaseURL: "https://rifas-c414b-default-rtdb.firebaseio.com",
+            projectId: "rifas-c414b",
+            storageBucket: "rifas-c414b.firebasestorage.app",
+            messagingSenderId: "770195193538",
+            appId: "1:770195193538:web:48e585ac5661d27f3dc55b"
+        };
         
         // Inicializa o Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         
         // Referência para os participantes no Firebase
-        const participantsRef = database.ref('batalhaGamer2024/participants');
+        const participantsRef = database.ref('batalhaGamer2025/participants');
+        
+        // Frases de desafio criativas
+        const challengePhrases = [
+            "Você tem o que é preciso para derrotar {name}?",
+            "{name} está dominando a arena! Quem vai detê-lo?",
+            "O troféu está esperando! {name} já está na batalha!",
+            "Sua habilidade é maior que a de {name}? Prove!",
+            "O lendário {name} aguarda um oponente digno!",
+            "Desafio lançado! {name} vs VOCÊ - quem vencerá?",
+            "A arena treme quando {name} joga. Você consegue enfrentar?",
+            "{name} já está aquecendo. E você, está pronto?",
+            "O trono gamer está vago. {name} quer coroar-se rei. E você?",
+            "Só os fortes sobrevivem. {name} já aceitou o desafio!"
+        ];
+        
+        // Títulos épicos para participantes
+        const epicTitles = [
+            "O Invencível",
+            "O Lendário",
+            "O Destruidor",
+            "O Implacável",
+            "O Mestre dos Games",
+            "O Rei do Controle",
+            "A Lenda Viva",
+            "O Campeão dos Campeões",
+            "O Assassino de Bosses",
+            "O Deus dos Jogos"
+        ];
         
         // Contador regressivo
         function updateCountdown() {
-            const eventDate = new Date('June 22, 2024 11:30:00').getTime();
+            const eventDate = new Date('June 22, 2025 11:30:00').getTime();
             const now = new Date().getTime();
             const distance = eventDate - now;
             
@@ -757,9 +1242,13 @@
                 const participantElement = document.createElement('div');
                 participantElement.classList.add('participant-card');
                 
+                // Escolhe um título épico aleatório baseado no nome (para consistência)
+                const titleIndex = (participant.name.length + index) % epicTitles.length;
+                const epicTitle = epicTitles[titleIndex];
+                
                 participantElement.innerHTML = `
                     <div class="participant-rank">${index + 1}</div>
-                    <div class="participant-name">${participant.name.toUpperCase()}</div>
+                    <div class="participant-name">${participant.name.toUpperCase()}<span class="participant-title">${epicTitle}</span></div>
                 `;
                 
                 participantsList.appendChild(participantElement);
@@ -769,6 +1258,10 @@
             if (participantArray.length > 0) {
                 const lastParticipant = participantArray[0].name;
                 document.getElementById('lastParticipant').textContent = lastParticipant.toUpperCase();
+                
+                // Escolhe uma frase de desafio aleatória
+                const randomPhrase = challengePhrases[Math.floor(Math.random() * challengePhrases.length)];
+                document.getElementById('challengePhrase').textContent = randomPhrase.replace('{name}', lastParticipant);
             }
         });
         
@@ -800,16 +1293,21 @@
         function confirmParticipation() {
             const name = playerNameInput.value.trim();
             
-            if (name === '') {
+            if (name === '' || name.length < 3) {
                 errorMessage.style.display = 'block';
                 return;
             }
+            
+            // Gera um emoji aleatório para o participante
+            const gamingEmojis = ['🎮', '👾', '🕹️', '🎯', '🔥', '⚔️', '🛡️', '🏆', '💣', '👑'];
+            const randomEmoji = gamingEmojis[Math.floor(Math.random() * gamingEmojis.length)];
             
             // Salva no Firebase com timestamp
             const newParticipantRef = participantsRef.push();
             newParticipantRef.set({
                 name: name,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                emoji: randomEmoji
             });
             
             // Feedback visual
@@ -825,23 +1323,43 @@
             confirmBtn.style.background = 'linear-gradient(45deg, var(--accent), #00cc77)';
             confirmBtn.classList.remove('btn-glow');
             
+            // Mensagem personalizada baseada no nome
+            const victoryMessages = [
+                `🚀 ${name.toUpperCase()} FOI CONVOCADO PARA A BATALHA! 🚀\n\nPrepare-se para dominar o torneio!`,
+                `🔥 ${name.toUpperCase()} ENTROU NA ARENA! 🔥\n\nOs outros participantes estão tremendo!`,
+                `💥 ${name.toUpperCase()} ACEITOU O DESAFIO! 💥\n\nA competição nunca foi tão intensa!`,
+                `🏆 ${name.toUpperCase()} ESTÁ PRONTO PARA A GLÓRIA! 🏆\n\nO torneio será lendário!`,
+                `⚔️ ${name.toUpperCase()} SE JUNTOU À BATALHA! ⚔️\n\nQuem será digno de enfrentá-lo?`
+            ];
+            
+            const randomMessage = victoryMessages[Math.floor(Math.random() * victoryMessages.length)];
+            
             // Mostra mensagem de sucesso
             setTimeout(() => {
-                alert(`🚀 ${name.toUpperCase()} FOI CONVOCADO PARA A BATALHA! 🚀\n\nPrepare-se para o torneio e mostre do que você é capaz!`);
+                alert(randomMessage);
             }, 500);
         }
         
         function createConfetti() {
-            const colors = ['#ff2d2d', '#ffcc00', '#00ff88', '#ffffff'];
+            const colors = ['#ff2d2d', '#ffcc00', '#00ff88', '#ffffff', '#00ffff', '#ff00ff'];
             const container = document.querySelector('.container');
             
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 150; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.top = '-10px';
+                confetti.style.top = '-15px';
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                
+                // Formas variadas
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                } else if (Math.random() > 0.7) {
+                    confetti.style.borderRadius = '0';
+                }
                 
                 container.appendChild(confetti);
                 
@@ -853,7 +1371,7 @@
                 `;
                 
                 confetti.style.setProperty('--end-left', `${Math.random() * 100 - 10}%`);
-                confetti.style.setProperty('--end-top', `${Math.random() * 50 + 50}%`);
+                confetti.style.setProperty('--end-top', `${Math.random() * 100 + 50}%`);
                 
                 setTimeout(() => {
                     confetti.remove();
@@ -867,7 +1385,7 @@
                     to {
                         left: var(--end-left);
                         top: var(--end-top);
-                        transform: rotate(360deg);
+                        transform: rotate(720deg);
                     }
                 }
                 @keyframes confettiFade {
@@ -893,6 +1411,18 @@
                 clearInterval(typing);
             }
         }, 100);
+        
+        // Efeito de hover nos highlights
+        const highlights = document.querySelectorAll('.highlight');
+        highlights.forEach(highlight => {
+            highlight.addEventListener('mouseover', () => {
+                highlight.style.animation = 'shake 0.3s infinite alternate';
+            });
+            
+            highlight.addEventListener('mouseout', () => {
+                highlight.style.animation = '';
+            });
+        });
     </script>
 </body>
 </html>
